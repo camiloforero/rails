@@ -62,6 +62,11 @@ if ActiveRecord::Base.connection.supports_virtual_columns?
       assert_equal "rails", VirtualColumn.take.lower_name
     end
 
+    def test_virtual_column_create_with_defaults
+      vc = VirtualColumn.create(name: "Rails2")
+      assert_equal "RAILS2", vc.upper_name # fail; this is nil
+    end
+
     def test_non_persisted_column
       message = <<~MSG
         PostgreSQL currently does not support VIRTUAL (not persisted) generated columns.

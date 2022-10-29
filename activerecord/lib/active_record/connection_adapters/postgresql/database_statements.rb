@@ -90,7 +90,11 @@ module ActiveRecord
           end
 
           if pk = suppress_composite_primary_key(pk)
-            sql = "#{sql} RETURNING #{quote_column_name(pk)}"
+            @returning << pk
+          end
+
+          if @returning.any?
+            sql = "#{sql} RETURNING #{@returning.map { |r| quote_column_name(r)}.join(', ')}"
           end
 
           super

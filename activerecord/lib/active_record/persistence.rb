@@ -493,7 +493,8 @@ module ActiveRecord
           im.insert(values.transform_keys { |name| arel_table[name] })
         end
 
-        connection.insert(im, "#{self} Create", primary_key || false, primary_key_value)
+        returning_columns = columns.filter(&:virtual?).map(&:name)
+        connection.insert(im, "#{self} Create", primary_key || false, primary_key_value, nil, [], returning_columns)
       end
 
       def _update_record(values, constraints) # :nodoc:
